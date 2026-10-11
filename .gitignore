@@ -1,0 +1,8 @@
+.venv/
+
+# Python service files
+__pycache__/
+*.pyc
+
+# VS Code settings
+.vscode/
