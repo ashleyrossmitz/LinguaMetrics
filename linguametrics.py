@@ -55,6 +55,13 @@ def session(activity):
         case _:
             return {}
     
+def run_session():
+    activity = show_activity_menu()
+    data = session(activity)
+    save_stats(data)
+    print(f"Session saved: {data}")
+    input("\nPress <Enter> to return to the main menu ...")
+    
 # ------- UI -------
 
 def main_menu():
@@ -66,15 +73,13 @@ def main_menu():
 def stats_menu():
     pass
 
-def activity_menu():
+def show_activity_menu() -> int:
     clear_screen()
     print("-" * 15, "ACTIVITIES", "-" * 15)
     print("\n1. Listening"
           "\n2. Reading"
           "\n3. Viewing")
-    data = session(user_input("\nSelect an activity (1-3): ", 1, 3))
-    print(data)
-    input()
+    return user_input("\nSelect an activity (1-3): ", 1, 3)
 
 # ------- LAUNCH -------
 
@@ -86,7 +91,7 @@ def main():
         choice = user_input("Select an action (1-3): ", 1, 3)
         
         if choice == 1:
-            activity_menu()
+            run_session()
         elif choice == 2:
             stats_menu()
         elif choice == 3:
