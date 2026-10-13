@@ -1,6 +1,5 @@
 # import json
 import os
-import msvcrt
 import time
 from datetime import datetime
 
@@ -17,14 +16,11 @@ def load_stats():
 
 def timer():
     clear_screen()
-    print("Press any key to start timer ...")
-    msvcrt.getch()
     
+    input("Press <Enter> to start timer ...")
     start = time.perf_counter()
     
-    print("Press any key to stop timer ...")
-    msvcrt.getch()
-        
+    input("Press <Enter> to stop timer ...")
     stop = time.perf_counter()
     
     date = datetime.now().strftime("%d.%m.%Y %H:%M")
