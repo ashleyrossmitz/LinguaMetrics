@@ -7,6 +7,8 @@ def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
     
 def user_input(req, a, b):
+    '''Checks whether the entered message is a number and whether it falls within the required range of numbers.'''
+    
     while True:
         try:
             user_choice = int(input(req))
@@ -26,6 +28,8 @@ def load_stats():
 # ------- CORE -------
 
 def timer() -> dict:
+    '''Measure the time between two Enter key presses and return the session dictionary.'''
+    
     clear_screen()
     
     input("Press <Enter> to start timer ...")
