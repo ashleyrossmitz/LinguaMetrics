@@ -76,7 +76,8 @@ def main_menu():
           "\n3. Exit\n")
 
 def stats_menu():
-    pass
+    print("-" * 15, "ACTIVITIES", "-" * 15)
+    input("\nPress <Enter> to return to the main menu ...")
 
 def show_activity_menu() -> int:
     clear_screen()
