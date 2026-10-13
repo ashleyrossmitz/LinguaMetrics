@@ -62,7 +62,6 @@ def session(activity) -> dict:
 def run_session():
     activity = show_activity_menu()
     data = session(activity)
-    save_stats(data)
     print(f"Session saved: {data}")
     input("\nPress <Enter> to return to the main menu ...")
     
