@@ -25,7 +25,7 @@ def load_stats():
 
 # ------- CORE -------
 
-def timer():
+def timer() -> dict:
     clear_screen()
     
     input("Press <Enter> to start timer ...")
@@ -43,7 +43,7 @@ def timer():
         "time": stop - start
         }
     
-def session(activity):
+def session(activity) -> dict:
     data = timer()
     match activity:
         case 1:
