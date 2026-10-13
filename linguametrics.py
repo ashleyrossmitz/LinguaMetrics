@@ -53,7 +53,7 @@ def session(activity):
         case 3:
             return data | {"activity": "viewing"}
         case _:
-            return {}
+            raise ValueError(f"Unknown activity: {activity}")
     
 def run_session():
     activity = show_activity_menu()
