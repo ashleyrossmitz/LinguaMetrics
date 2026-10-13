@@ -5,6 +5,17 @@ from datetime import datetime
 
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
+    
+def user_input(req, a, b):
+    while True:
+        try:
+            user_choice = int(input(req))
+            if a <= user_choice <= b:
+                return user_choice
+            else:
+                print(f"Input error. Enter a number from {a} to {b}. Try again.")
+        except ValueError:
+            print("Error. You entered a non-integer number. Try again.")
 
 def save_stats():
     pass
@@ -61,7 +72,7 @@ def activity_menu():
     print("\n1. Listening"
           "\n2. Reading"
           "\n3. Viewing")
-    data = session(int(input("\nSelect an activity (1-3): ")))
+    data = session(user_input("\nSelect an activity (1-3): ", 1, 3))
     print(data)
     input()
 
@@ -72,7 +83,7 @@ def main():
         clear_screen()
         main_menu()
         
-        choice = int(input("Select an action (1-3): "))
+        choice = user_input("Select an action (1-3): ", 1, 3)
         
         if choice == 1:
             activity_menu()
