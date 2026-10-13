@@ -52,13 +52,13 @@ LibguaMetrics/
 
 ## 🗺 Plans
 
-□ Improve the console prototype
-    □ Add input validation
-    □ Implement save_stats() and load_stats()
-    □ Implement the statistics menu
-    □ Make input cross-platform (drop msvcrt)
-    □ Move statistics storage to SQLite
-□ Build a website
+- [ ] Improve the console prototype
+- [ ] Add input validation
+- [ ] Implement save_stats() and load_stats()
+- [ ] Implement the statistics menu
+- [ ] Make input cross-platform (drop msvcrt)
+- [ ] Move statistics storage to SQLite
+- [ ] Build a website
 
 ## 📄 License
 
