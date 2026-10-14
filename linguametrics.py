@@ -43,11 +43,15 @@ def init_db() -> None:
         
 def add_session(session_data: dict) -> None:
     """Adds session data to the SQLite table."""
-    with sqlite3.connect(DB) as conn:
-        conn.execute(
-            "INSERT INTO statistics (activity, duration, date) VALUES (?, ?, ?)",
-            (session_data['activity'], session_data['duration'], session_data['date'])
-        )
+    conn = sqlite3.connect(DB)
+    try:
+        with conn:
+            conn.execute(
+                "INSERT INTO statistics (activity, duration, date) VALUES (?, ?, ?)",
+                (session_data['activity'], session_data['duration'], session_data['date'])
+            )
+    finally:
+        conn.close()
 
 # ------- CORE -------
 
