@@ -13,10 +13,10 @@ DB = "statistics.db"
 
 # ------- UTILITIES -------
 
-def clear_screen():
+def clear_screen() -> None:
     os.system("cls" if os.name == "nt" else "clear")
     
-def user_input(req, a, b):
+def input_in_range(req: str, a: int, b: int) -> int:
     '''Checks whether the entered message is a number and whether it falls within the required range of numbers.'''
     
     while True:
@@ -29,23 +29,24 @@ def user_input(req, a, b):
         except ValueError:
             print("Error. You entered a non-integer number. Try again.")
 
-def init_db():
-    """Create table"""
+def init_db() -> None:
+    """Creates a table if it doesn't exist."""
     with sqlite3.connect(DB) as conn:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS statistics (
                 id INTEGER PRIMARY KEY,
                 activity TEXT NOT NULL,
-                time FLOAT,
+                duration REAL,
                 date TEXT NOT NULL
             )        
         """)
         
-def add_session(session_data):
+def add_session(session_data: dict) -> None:
+    """Adds session data to the SQLite table."""
     with sqlite3.connect(DB) as conn:
         conn.execute(
             "INSERT INTO statistics (activity, time, date) VALUES (?, ?, ?)",
-            (session_data['activity'], session_data['time'], session_data['date'])
+            (session_data['activity'], session_data['duration'], session_data['date'])
         )
 
 # ------- CORE -------
@@ -61,24 +62,24 @@ def timer() -> dict:
     input("Press <Enter> to stop timer ...")
     stop = time.perf_counter()
     
-    date = datetime.now().strftime("%d.%m.%Y %H:%M")
+    date = datetime.now().strftime("%Y-%m-%d %H:%M")
     
     clear_screen()
     
     return {
         "date": date, 
-        "time": stop - start
+        "duration": stop - start
         }
     
-def session(activity_code) -> dict:
+def build_session_data(activity_code: int) -> dict:
     if activity_code not in ACTIVITIES:
         raise ValueError(f"Unknown activity: {activity_code}")
     data = timer()
     return data | {"activity": ACTIVITIES[activity_code]}
     
-def run_session():
+def run_session() -> None:
     activity = show_activity_menu()
-    data = session(activity)
+    data = build_session_data(activity)
     
     add_session(data)
     
@@ -86,13 +87,13 @@ def run_session():
     
 # ------- UI -------
 
-def main_menu():
+def main_menu() -> None:
     print("-" * 15, "LinguaMetrics", "-" * 15)
     print("\n1. Start session"
           "\n2. Statistics"
           "\n3. Exit\n")
 
-def stats_menu():
+def stats_menu() -> None:
     print("-" * 15, "STATISTICS", "-" * 15)
     input("\nPress <Enter> to return to the main menu ...")
 
@@ -102,17 +103,17 @@ def show_activity_menu() -> int:
     print("\n1. Listening"
           "\n2. Reading"
           "\n3. Viewing")
-    return user_input("\nSelect an activity (1-3): ", 1, 3)
+    return input_in_range("\nSelect an activity (1-3): ", 1, 3)
 
 # ------- LAUNCH -------
 
-def main():
+def main() -> None:
     while True:
         init_db()
         clear_screen()
         main_menu()
         
-        choice = user_input("Select an action (1-3): ", 1, 3)
+        choice = input_in_range("Select an action (1-3): ", 1, 3)
         
         if choice == 1:
             run_session()
