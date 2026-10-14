@@ -1,5 +1,6 @@
 import os
 import time
+import sqlite3
 from datetime import datetime
 
 ACTIVITIES = {
@@ -7,6 +8,8 @@ ACTIVITIES = {
     2: "reading",
     3: "viewing"
 }
+
+DB = "statistics.db"
 
 # ------- UTILITIES -------
 
@@ -26,11 +29,24 @@ def user_input(req, a, b):
         except ValueError:
             print("Error. You entered a non-integer number. Try again.")
 
-def save_stats():
-    pass
-
-def load_stats():
-    pass
+def init_db():
+    """Create table"""
+    with sqlite3.connect(DB) as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS statistics (
+                id INTEGER PRIMARY KEY,
+                activity TEXT NOT NULL,
+                time FLOAT,
+                date TEXT NOT NULL
+            )        
+        """)
+        
+def add_session(session_data):
+    with sqlite3.connect(DB) as conn:
+        conn.execute(
+            "INSERT INTO statistics (activity, time, date) VALUES (?, ?, ?)",
+            (session_data['activity'], session_data['time'], session_data['date'])
+        )
 
 # ------- CORE -------
 
@@ -63,7 +79,9 @@ def session(activity_code) -> dict:
 def run_session():
     activity = show_activity_menu()
     data = session(activity)
-    print(f"Session: {data}")
+    
+    add_session(data)
+    
     input("\nPress <Enter> to return to the main menu ...")
     
 # ------- UI -------
@@ -90,6 +108,7 @@ def show_activity_menu() -> int:
 
 def main():
     while True:
+        init_db()
         clear_screen()
         main_menu()
         
