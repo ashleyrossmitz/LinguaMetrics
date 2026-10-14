@@ -2,10 +2,18 @@
 
 # Personal data
 statistics.db
+*.sqlite
+*.sqlite3
 
 # Python service files
 __pycache__/
 *.pyc
 
-# VS Code settings
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editor settings
 .vscode/
+.idea/
