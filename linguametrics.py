@@ -1,4 +1,3 @@
-# import json
 import os
 import time
 from datetime import datetime
@@ -64,19 +63,19 @@ def session(activity) -> dict:
 def run_session():
     activity = show_activity_menu()
     data = session(activity)
-    print(f"Session saved: {data}")
+    print(f"Session: {data}")
     input("\nPress <Enter> to return to the main menu ...")
     
 # ------- UI -------
 
 def main_menu():
-    print("-" * 15, " LinguaMetrics ", "-" * 15)
+    print("-" * 15, "LinguaMetrics", "-" * 15)
     print("\n1. Start session"
           "\n2. Statistics"
           "\n3. Exit\n")
 
 def stats_menu():
-    print("-" * 15, "ACTIVITIES", "-" * 15)
+    print("-" * 15, "STATISTICS", "-" * 15)
     input("\nPress <Enter> to return to the main menu ...")
 
 def show_activity_menu() -> int:
