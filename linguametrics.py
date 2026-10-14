@@ -36,7 +36,7 @@ def init_db() -> None:
             CREATE TABLE IF NOT EXISTS statistics (
                 id INTEGER PRIMARY KEY,
                 activity TEXT NOT NULL,
-                duration REAL,
+                duration REAL NOT NULL,
                 date TEXT NOT NULL
             )        
         """)
