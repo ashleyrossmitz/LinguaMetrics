@@ -2,6 +2,12 @@ import os
 import time
 from datetime import datetime
 
+ACTIVITIES = {
+    1: "listening",
+    2: "reading",
+    3: "viewing"
+}
+
 # ------- UTILITIES -------
 
 def clear_screen():
@@ -48,17 +54,11 @@ def timer() -> dict:
         "time": stop - start
         }
     
-def session(activity) -> dict:
+def session(activity_code) -> dict:
+    if activity_code not in ACTIVITIES:
+        raise ValueError(f"Unknown activity: {activity_code}")
     data = timer()
-    match activity:
-        case 1:
-            return data | {"activity": "listening"}
-        case 2:
-            return data | {"activity": "reading"}
-        case 3:
-            return data | {"activity": "viewing"}
-        case _:
-            raise ValueError(f"Unknown activity: {activity}")
+    return data | {"activity": ACTIVITIES[activity_code]}
     
 def run_session():
     activity = show_activity_menu()
