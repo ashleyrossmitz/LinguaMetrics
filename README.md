@@ -38,7 +38,7 @@ python linguametrics.py
 ## 📁 Project structure
 
 ```
-LibguaMetrics/
+LinguaMetrics/
 ├── linguametrics.py       # main code
 ├── .gitignore             # what not to push to Git
 ├── README.md              # this file
