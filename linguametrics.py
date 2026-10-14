@@ -45,37 +45,34 @@ def add_session(session_data: dict) -> None:
     """Adds session data to the SQLite table."""
     with sqlite3.connect(DB) as conn:
         conn.execute(
-            "INSERT INTO statistics (activity, time, date) VALUES (?, ?, ?)",
+            "INSERT INTO statistics (activity, duration, date) VALUES (?, ?, ?)",
             (session_data['activity'], session_data['duration'], session_data['date'])
         )
 
 # ------- CORE -------
 
-def timer() -> dict:
-    '''Measure the time between two Enter key presses and return the session dictionary.'''
-    
-    clear_screen()
-    
-    input("Press <Enter> to start timer ...")
+def measure_time(start_msg: str, stop_msg: str) -> float:
+    '''Counts the duration between two Enter presses.'''
+    input(start_msg)
     start = time.perf_counter()
-    
-    input("Press <Enter> to stop timer ...")
+    input(stop_msg)
     stop = time.perf_counter()
-    
-    date = datetime.now().strftime("%Y-%m-%d %H:%M")
-    
-    clear_screen()
-    
-    return {
-        "date": date, 
-        "duration": stop - start
-        }
+    return stop - start
     
 def build_session_data(activity_code: int) -> dict:
+    """Collects data for a single session: activity, duration, date."""
     if activity_code not in ACTIVITIES:
         raise ValueError(f"Unknown activity: {activity_code}")
-    data = timer()
-    return data | {"activity": ACTIVITIES[activity_code]}
+    
+    clear_screen()
+    
+    duration = measure_time(
+        "Press <Enter> to start timer ...",
+        "Press <Enter> to stop timer ..."
+    )
+    date = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    return {"activity": ACTIVITIES[activity_code], "duration": duration, "date": date}
     
 def run_session() -> None:
     activity = show_activity_menu()
@@ -108,8 +105,8 @@ def show_activity_menu() -> int:
 # ------- LAUNCH -------
 
 def main() -> None:
+    init_db()
     while True:
-        init_db()
         clear_screen()
         main_menu()
         
