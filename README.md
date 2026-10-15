@@ -38,7 +38,7 @@ A `statistics.db` file will be created automatically in the current directory on
 
 ## Requirements
 
-- Python 3.10+ (uses dict | dict merge syntax)
+- Python 3.9+
 - SQLite is bundled with Python via the standard sqlite3 module — no installation needed
 
 ## 📁 Project structure
