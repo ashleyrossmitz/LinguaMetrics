@@ -94,7 +94,8 @@ def main_menu() -> None:
           "\n2. Statistics"
           "\n3. Exit\n")
 
-def stats_menu() -> None:
+def statistics_menu() -> None:
+    clear_screen()
     print("-" * 15, "STATISTICS", "-" * 15)
     input("\nPress <Enter> to return to the main menu ...")
 
@@ -120,7 +121,7 @@ def main() -> None:
         if choice == 1:
             run_session()
         elif choice == 2:
-            stats_menu()
+            statistics_menu()
         elif choice == 3:
             break
 
