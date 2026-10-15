@@ -31,15 +31,19 @@ def input_in_range(req: str, a: int, b: int) -> int:
 
 def init_db() -> None:
     """Creates a table if it doesn't exist."""
-    with sqlite3.connect(DB) as conn:
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS statistics (
-                id INTEGER PRIMARY KEY,
-                activity TEXT NOT NULL,
-                duration REAL NOT NULL,
-                date TEXT NOT NULL
-            )        
-        """)
+    conn = sqlite3.connect(DB)
+    try:
+        with conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS statistics (
+                    id INTEGER PRIMARY KEY,
+                    activity TEXT NOT NULL,
+                    duration REAL NOT NULL,
+                    date TEXT NOT NULL
+                )        
+            """)
+    finally:
+        conn.close()
         
 def add_session(session_data: dict) -> None:
     """Adds session data to the SQLite table."""
