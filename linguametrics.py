@@ -48,7 +48,8 @@ def init_db() -> None:
                     id INTEGER PRIMARY KEY,
                     activity TEXT NOT NULL,
                     duration REAL NOT NULL,
-                    date TEXT NOT NULL
+                    date TEXT NOT NULL,
+                    language TEXT NOT NULL
                 )        
             """)
     except sqlite3.Error:
@@ -65,8 +66,8 @@ def add_session(session_data: dict) -> str:
         conn = sqlite3.connect(DB)
         with conn:
             conn.execute(
-                "INSERT INTO statistics (activity, duration, date) VALUES (?, ?, ?)",
-                (session_data['activity'], session_data['duration'], session_data['date'])
+                "INSERT INTO statistics (activity, duration, date, language) VALUES (?, ?, ?, ?)",
+                (session_data['activity'], session_data['duration'], session_data['date'], session_data['language'])
             )
         return "ok"
     except sqlite3.IntegrityError:
@@ -102,7 +103,9 @@ def build_session_data(activity_code: int) -> dict:
     )
     date = datetime.now().strftime("%Y-%m-%d %H:%M")
     
-    return {"activity": ACTIVITIES[activity_code], "duration": duration, "date": date}
+    language = "English"
+    
+    return {"activity": ACTIVITIES[activity_code], "duration": duration, "date": date, "language": language}
     
 def run_session() -> None:
     activity = show_activity_menu()
