@@ -11,6 +11,12 @@ ACTIVITIES = {
 
 DB = "statistics.db"
 
+ERRORS = {
+    "OperationalError": "Error: the database is busy, access is denied, or the file is corrupted.",
+    "IntegrityError": "Error: invalid data.",
+    "DatabaseError": "Error: the database is corrupted."
+}
+
 # ------- UTILITIES -------
 
 def clear_screen() -> None:
@@ -45,17 +51,26 @@ def init_db() -> None:
     finally:
         conn.close()
         
-def add_session(session_data: dict) -> None:
+def add_session(session_data: dict) -> str:
     """Adds session data to the SQLite table."""
-    conn = sqlite3.connect(DB)
+    conn = None
     try:
+        conn = sqlite3.connect(DB)
         with conn:
             conn.execute(
                 "INSERT INTO statistics (activity, duration, date) VALUES (?, ?, ?)",
                 (session_data['activity'], session_data['duration'], session_data['date'])
             )
+        return "ok"
+    except sqlite3.IntegrityError:
+            return "IntegrityError"
+    except sqlite3.OperationalError:
+        return "OperationalError"
+    except sqlite3.DatabaseError:
+        return "DatabaseError"
     finally:
-        conn.close()
+        if conn:
+            conn.close()
 
 # ------- CORE -------
 
@@ -85,9 +100,19 @@ def build_session_data(activity_code: int) -> dict:
 def run_session() -> None:
     activity = show_activity_menu()
     data = build_session_data(activity)
+    result_of_addition = add_session(data)
     
-    add_session(data)
-    
+    if result_of_addition == "ok":
+        print(f"\nSession saved: {data['activity']} — {round(data['duration'], 2)}")
+    else:
+        if result_of_addition == "OperationalError":
+            print(ERRORS["OperationalError"])
+        elif result_of_addition == "IntegrityError":
+            print(ERRORS["IntegrityError"])
+        elif result_of_addition == "DatabaseError":
+            print(ERRORS["DatabaseError"])
+        print(f"\nData of the last session: {data['activity']} — {round(data['duration'], 2)}, date: {data['date']}")
+        
     input("\nPress <Enter> to return to the main menu ...")
     
 # ------- UI -------
