@@ -1,6 +1,7 @@
 import os
 import time
 import sqlite3
+import sys
 from datetime import datetime
 
 ACTIVITIES = {
@@ -14,7 +15,8 @@ DB = "statistics.db"
 ERRORS = {
     "OperationalError": "Error: the database is busy, access is denied, or the file is corrupted.",
     "IntegrityError": "Error: invalid data.",
-    "DatabaseError": "Error: the database is corrupted."
+    "DatabaseError": "Error: the database is corrupted.",
+    "Error": "Failed to open the database. The program cannot run."
 }
 
 # ------- UTILITIES -------
@@ -37,8 +39,9 @@ def input_in_range(req: str, a: int, b: int) -> int:
 
 def init_db() -> None:
     """Creates a table if it doesn't exist."""
-    conn = sqlite3.connect(DB)
+    conn = None
     try:
+        conn = sqlite3.connect(DB)
         with conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS statistics (
@@ -48,8 +51,12 @@ def init_db() -> None:
                     date TEXT NOT NULL
                 )        
             """)
+    except sqlite3.Error:
+        print(ERRORS["Error"])
+        sys.exit(1)
     finally:
-        conn.close()
+        if conn:
+            conn.close()
         
 def add_session(session_data: dict) -> str:
     """Adds session data to the SQLite table."""
