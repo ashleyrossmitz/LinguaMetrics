@@ -101,10 +101,11 @@ def stats_menu() -> None:
 def show_activity_menu() -> int:
     clear_screen()
     print("-" * 15, "ACTIVITIES", "-" * 15)
-    print("\n1. Listening"
-          "\n2. Reading"
-          "\n3. Viewing")
-    return input_in_range("\nSelect an activity (1-3): ", 1, 3)
+    
+    for code, name in ACTIVITIES.items():
+        print(f"{code}. {name.capitalize()}")
+    
+    return input_in_range("\nSelect an activity: ", 1, len(ACTIVITIES))
 
 # ------- LAUNCH -------
 
