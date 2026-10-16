@@ -147,6 +147,15 @@ def show_activity_menu() -> int:
     
     return input_in_range("\nSelect an activity: ", 1, len(ACTIVITIES))
 
+def select_period_menu() -> int:
+    clear_screen()
+    print("-" * 10, "STATISTICS FOR THE PERIOD", "-" * 10)
+    print("\n1. Today"
+          "\n2. For the week"
+          "\n3. For all time")
+    
+    return input_in_range("\nSelect a period: ", 1, 3)
+
 # ------- LAUNCH -------
 
 def main() -> None:
