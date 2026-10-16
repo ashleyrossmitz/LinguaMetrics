@@ -125,6 +125,13 @@ def run_session() -> None:
         
     input("\nPress <Enter> to return to the main menu ...")
     
+def show_statistics() -> str:
+    period = select_period_menu()
+    match period:
+        case 1: return "today"
+        case 2: return "for the week"
+        case 3: return "for all time"
+    
 # ------- UI -------
 
 def main_menu() -> None:
@@ -169,7 +176,7 @@ def main() -> None:
         if choice == 1:
             run_session()
         elif choice == 2:
-            statistics_menu()
+            show_statistics()
         elif choice == 3:
             break
 
