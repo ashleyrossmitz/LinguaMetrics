@@ -184,7 +184,7 @@ def record_session() -> None:
     status = add_session(session_record)
     
     if status == "ok":
-        print(f"\nSession saved: {session_record['activity']} — {round(session_record['duration'], 2)}")
+        print(f"\nSession saved: {session_record['activity']} — {format_seconds(session_record['duration'])}, date: {session_record['date']}")
     else:
         if status == "OperationalError":
             print(ERRORS["OperationalError"])
@@ -192,7 +192,7 @@ def record_session() -> None:
             print(ERRORS["IntegrityError"])
         elif status == "DatabaseError":
             print(ERRORS["DatabaseError"])
-        print(f"\nData of the last session: {session_record['activity']} — {round(session_record['duration'], 2)}, date: {session_record['date']}")
+        print(f"\nData of the last session: {session_record['activity']} — {format_seconds(session_record['duration'])}, date: {session_record['date']}")
         
     input("\nPress <Enter> to return to the main menu ...")
     
@@ -209,13 +209,13 @@ def show_statistics() -> None:
             case 3: print("Statistics for all time:\n")
         
         for activity, total in activity_totals.items():
-            print(f"{activity.capitalize()} - {round(total, 2)} seconds")
+            print(f"{activity.capitalize()} - {format_seconds(total)}")
         
         print("\nLast sessions:\n")
-        print(f"{'Activity':^15} | {'Duration':^10} | {'Date':^15}")
-        print("-" * 15, "-" * 10, "-" * 15, sep=" | ")
+        print(f"{'Activity':^15} | {'Duration':^15} | {'Date':^15}")
+        print("-" * 15, "-" * 15, "-" * 15, sep=" | ")
         for session in load_latest_sessions():
-            print(f"{session['activity']:>15} | {round(session['duration'], 2):<10} | {session['date']:<15}")
+            print(f"{session['activity']:>15} | {format_seconds(session['duration']):<15} | {session['date']:<15}")
     else:
         print("No statistics available for the selected period.")
         
