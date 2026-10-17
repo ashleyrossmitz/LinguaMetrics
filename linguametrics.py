@@ -108,12 +108,18 @@ def load_period_totals(period: int) -> dict:
         if conn:
             conn.close()
             
-def load_latest_sessions() -> list:
+def load_latest_sessions(period: int = 1) -> list:
     conn = None
     try:
         conn = sqlite3.connect(DATABASE_FILE)
         cur = conn.cursor()
-        cur.execute("SELECT activity, duration, date FROM statistics ORDER BY id DESC LIMIT 3")
+        match period:
+            case 1:
+                cur.execute("SELECT activity, duration, date FROM statistics WHERE date = ? ORDER BY id DESC LIMIT 3", (datetime.now().strftime("%Y-%m-%d"),))
+            case 2:
+                cur.execute("SELECT activity, duration, date FROM statistics WHERE date >= ? ORDER BY id DESC LIMIT 3", ((datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d"),))
+            case 3:
+                cur.execute("SELECT activity, duration, date FROM statistics ORDER BY id DESC LIMIT 3")
         rows = cur.fetchall()
         return [{"activity": row[0], "duration": row[1], "date": row[2]} for row in rows]
     finally:
@@ -214,7 +220,8 @@ def show_statistics() -> None:
         print("\nLast sessions:\n")
         print(f"{'Activity':^15} | {'Duration':^15} | {'Date':^15}")
         print("-" * 15, "-" * 15, "-" * 15, sep=" | ")
-        for session in load_latest_sessions():
+        
+        for session in load_latest_sessions(period):
             print(f"{session['activity']:>15} | {format_seconds(session['duration']):<15} | {session['date']:<15}")
     else:
         print("No statistics available for the selected period.")
