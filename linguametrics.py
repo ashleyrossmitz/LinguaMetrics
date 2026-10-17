@@ -4,6 +4,8 @@ import sqlite3
 import sys
 from datetime import datetime, timedelta
 
+# ------- CONSTANTS -------
+
 ACTIVITIES = {
     1: "listening",
     2: "reading",
@@ -19,23 +21,7 @@ ERRORS = {
     "Error": "Failed to open the database. The program cannot run."
 }
 
-# ------- UTILITIES -------
-
-def clear_screen() -> None:
-    os.system("cls" if os.name == "nt" else "clear")
-    
-def prompt_int_in_range(prompt: str, min_value: int, max_value: int) -> int:
-    '''Checks whether the entered message is a number and whether it falls within the required range of numbers.'''
-    
-    while True:
-        try:
-            user_choice = int(input(prompt))
-            if min_value <= user_choice <= max_value:
-                return user_choice
-            else:
-                print(f"Input error. Enter a number from {min_value} to {max_value}. Try again.")
-        except ValueError:
-            print("Error. You entered a non-integer number. Try again.")
+# ------- DATABASE -------
 
 def init_db() -> None:
     """Creates a table if it doesn't exist."""
@@ -58,7 +44,7 @@ def init_db() -> None:
     finally:
         if conn:
             conn.close()
-        
+            
 def add_session(session_record: dict) -> str:
     """Adds session data to the SQLite table."""
     conn = None
@@ -125,6 +111,24 @@ def load_latest_sessions(period: int = 1) -> list:
     finally:
         if conn:
             conn.close()
+
+# ------- UTILITIES -------
+
+def clear_screen() -> None:
+    os.system("cls" if os.name == "nt" else "clear")
+    
+def prompt_int_in_range(prompt: str, min_value: int, max_value: int) -> int:
+    '''Checks whether the entered message is a number and whether it falls within the required range of numbers.'''
+    
+    while True:
+        try:
+            user_choice = int(input(prompt))
+            if min_value <= user_choice <= max_value:
+                return user_choice
+            else:
+                print(f"Input error. Enter a number from {min_value} to {max_value}. Try again.")
+        except ValueError:
+            print("Error. You entered a non-integer number. Try again.")
             
 def format_seconds(total_seconds):
     if total_seconds < 0:
@@ -183,7 +187,40 @@ def build_session_record(activity_code: int) -> dict:
     language = "English"
     
     return {"activity": ACTIVITIES[activity_code], "duration": duration, "date": date, "language": language}
+
+# ------- UI -------
+
+def print_main_menu() -> None:
+    print("-" * 15, "LinguaMetrics", "-" * 15)
+    print("\n1. Start session"
+          "\n2. Statistics"
+          "\n3. Exit\n")
+
+def print_statistics_screen() -> None:
+    clear_screen()
+    print("-" * 15, "STATISTICS", "-" * 15)
+    print()
+
+def choose_activity() -> int:
+    clear_screen()
+    print("-" * 15, "ACTIVITIES", "-" * 15)
     
+    for code, name in ACTIVITIES.items():
+        print(f"{code}. {name.capitalize()}")
+    
+    return prompt_int_in_range("\nSelect an activity: ", 1, len(ACTIVITIES))
+
+def choose_period() -> int:
+    clear_screen()
+    print("-" * 10, "STATISTICS FOR THE PERIOD", "-" * 10)
+    print("\n1. Today"
+          "\n2. For the week"
+          "\n3. For all time")
+    
+    return prompt_int_in_range("\nSelect a period: ", 1, 3)
+
+# ------- SCREENS -------
+
 def record_session() -> None:
     activity = choose_activity()
     session_record = build_session_record(activity)
@@ -227,37 +264,6 @@ def show_statistics() -> None:
         print("No statistics available for the selected period.")
         
     input("\nPress <Enter> to return to the main menu ...")
-    
-# ------- UI -------
-
-def print_main_menu() -> None:
-    print("-" * 15, "LinguaMetrics", "-" * 15)
-    print("\n1. Start session"
-          "\n2. Statistics"
-          "\n3. Exit\n")
-
-def print_statistics_screen() -> None:
-    clear_screen()
-    print("-" * 15, "STATISTICS", "-" * 15)
-    print()
-
-def choose_activity() -> int:
-    clear_screen()
-    print("-" * 15, "ACTIVITIES", "-" * 15)
-    
-    for code, name in ACTIVITIES.items():
-        print(f"{code}. {name.capitalize()}")
-    
-    return prompt_int_in_range("\nSelect an activity: ", 1, len(ACTIVITIES))
-
-def choose_period() -> int:
-    clear_screen()
-    print("-" * 10, "STATISTICS FOR THE PERIOD", "-" * 10)
-    print("\n1. Today"
-          "\n2. For the week"
-          "\n3. For all time")
-    
-    return prompt_int_in_range("\nSelect a period: ", 1, 3)
 
 # ------- LAUNCH -------
 
