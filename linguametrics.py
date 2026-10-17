@@ -108,7 +108,7 @@ def load_period_totals(period: int) -> dict:
         if conn:
             conn.close()
             
-def load_lastest_session() -> list:
+def load_latest_sessions() -> list:
     conn = None
     try:
         conn = sqlite3.connect(DATABASE_FILE)
@@ -184,7 +184,7 @@ def show_statistics() -> None:
         print("\nLast sessions:\n")
         print(f"{'Activity':^15} | {'Duration':^10} | {'Date':^15}")
         print("-" * 15, "-" * 10, "-" * 15, sep=" | ")
-        for session in load_lastest_session():
+        for session in load_latest_sessions():
             print(f"{session['activity']:>15} | {round(session['duration'], 2):<10} | {session['date']:<15}")
     else:
         print("No statistics available for the selected period.")
