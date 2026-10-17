@@ -2,7 +2,7 @@ import os
 import time
 import sqlite3
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 
 ACTIVITIES = {
     1: "listening",
@@ -79,6 +79,34 @@ def add_session(session_data: dict) -> str:
     finally:
         if conn:
             conn.close()
+            
+def load_statistics(period: int) -> dict:
+    conn = None
+    try:
+        conn = sqlite3.connect(DB)
+        cur = conn.cursor()
+        match period:
+            case 1:
+                cur.execute("""
+                    SELECT activity, SUM(duration)
+                    FROM statistics
+                    WHERE date = ?
+                    GROUP BY activity            
+                """, (datetime.now().strftime("%Y-%m-%d"),))
+            case 2:
+                cur.execute("""
+                    SELECT activity, SUM(duration)
+                    FROM statistics
+                    WHERE date >= ?
+                    GROUP BY activity            
+                """, ((datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d"),))
+            case 3:
+                cur.execute("SELECT activity, SUM(duration) FROM statistics GROUP BY activity")
+        rows = cur.fetchall()
+        return {activity: total for activity, total in rows}
+    finally:
+        if conn:
+            conn.close()
 
 # ------- CORE -------
 
@@ -101,7 +129,7 @@ def build_session_data(activity_code: int) -> dict:
         "Press <Enter> to start timer ...",
         "Press <Enter> to stop timer ..."
     )
-    date = datetime.now().strftime("%Y-%m-%d %H:%M")
+    date = datetime.now().strftime("%Y-%m-%d")
     
     language = "English"
     
@@ -128,9 +156,14 @@ def run_session() -> None:
 def show_statistics() -> str:
     period = select_period_menu()
     match period:
-        case 1: return "today"
-        case 2: return "for the week"
-        case 3: return "for all time"
+        case 1:
+            period_data = load_statistics(1)
+        case 2:
+            period_data = load_statistics(2)
+        case 3:
+            period_data = load_statistics(3)
+    print(period_data)
+    input()
     
 # ------- UI -------
 
