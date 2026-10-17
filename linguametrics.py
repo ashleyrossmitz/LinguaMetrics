@@ -118,7 +118,7 @@ def measure_time(start_msg: str, stop_msg: str) -> float:
     stop_time = time.perf_counter()
     return stop_time - start_time
     
-def build_session_data(activity_code: int) -> dict:
+def build_session_record(activity_code: int) -> dict:
     """Collects data for a single session: activity, duration, date."""
     if activity_code not in ACTIVITIES:
         raise ValueError(f"Unknown activity: {activity_code}")
@@ -137,11 +137,11 @@ def build_session_data(activity_code: int) -> dict:
     
 def record_session() -> None:
     activity = choose_activity()
-    data = build_session_data(activity)
-    status = add_session(data)
+    session_record = build_session_record(activity)
+    status = add_session(session_record)
     
     if status == "ok":
-        print(f"\nSession saved: {data['activity']} — {round(data['duration'], 2)}")
+        print(f"\nSession saved: {session_record['activity']} — {round(session_record['duration'], 2)}")
     else:
         if status == "OperationalError":
             print(ERRORS["OperationalError"])
@@ -149,11 +149,11 @@ def record_session() -> None:
             print(ERRORS["IntegrityError"])
         elif status == "DatabaseError":
             print(ERRORS["DatabaseError"])
-        print(f"\nData of the last session: {data['activity']} — {round(data['duration'], 2)}, date: {data['date']}")
+        print(f"\nData of the last session: {session_record['activity']} — {round(session_record['duration'], 2)}, date: {session_record['date']}")
         
     input("\nPress <Enter> to return to the main menu ...")
     
-def show_statistics() -> str:
+def show_statistics():
     period = choose_period()
     match period:
         case 1:
@@ -173,7 +173,7 @@ def print_main_menu() -> None:
           "\n2. Statistics"
           "\n3. Exit\n")
 
-def print_statistics() -> None:
+def print_statistics_screen() -> None:
     clear_screen()
     print("-" * 15, "STATISTICS", "-" * 15)
     input("\nPress <Enter> to return to the main menu ...")
