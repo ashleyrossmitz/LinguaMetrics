@@ -153,11 +153,23 @@ def record_session() -> None:
         
     input("\nPress <Enter> to return to the main menu ...")
     
-def show_statistics():
+def show_statistics() -> None:
     period = choose_period()
+    
+    clear_screen()
+    print_statistics_screen()
+    
     activity_totals = load_period_totals(period)
-    print(activity_totals)
-    input()
+    
+    match period:
+        case 1: print("Statistics for today:\n")
+        case 2: print("Statistics for the week:\n")
+        case 3: print("Statistics for all time:\n")
+    
+    for activity, total in activity_totals.items():
+        print(f"{activity.capitalize()} - {round(total, 2)} seconds")
+        
+    input("\nPress <Enter> to return to the main menu ...")
     
 # ------- UI -------
 
@@ -170,7 +182,7 @@ def print_main_menu() -> None:
 def print_statistics_screen() -> None:
     clear_screen()
     print("-" * 15, "STATISTICS", "-" * 15)
-    input("\nPress <Enter> to return to the main menu ...")
+    print()
 
 def choose_activity() -> int:
     clear_screen()
