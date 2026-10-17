@@ -107,6 +107,21 @@ def load_period_totals(period: int) -> dict:
     finally:
         if conn:
             conn.close()
+            
+def load_lastest_session() -> list:
+    conn = None
+    try:
+        conn = sqlite3.connect(DATABASE_FILE)
+        cur = conn.cursor()
+        cur.execute("SELECT activity, duration, date FROM statistics ORDER BY id DESC LIMIT 3")
+        rows = cur.fetchall()
+        if rows:
+            return [{"activity": row[0], "duration": row[1], "date": row[2]} for row in rows]
+        else:
+            return []
+    finally:
+        if conn:
+            conn.close()
 
 # ------- CORE -------
 
@@ -160,14 +175,22 @@ def show_statistics() -> None:
     print_statistics_screen()
     
     activity_totals = load_period_totals(period)
-    
-    match period:
-        case 1: print("Statistics for today:\n")
-        case 2: print("Statistics for the week:\n")
-        case 3: print("Statistics for all time:\n")
-    
-    for activity, total in activity_totals.items():
-        print(f"{activity.capitalize()} - {round(total, 2)} seconds")
+    if activity_totals:
+        match period:
+            case 1: print("Statistics for today:\n")
+            case 2: print("Statistics for the week:\n")
+            case 3: print("Statistics for all time:\n")
+        
+        for activity, total in activity_totals.items():
+            print(f"{activity.capitalize()} - {round(total, 2)} seconds")
+        
+        print("\nLast sessions:\n")
+        print(f"{'Activity':^15} | {'Duration':^10} | {'Date':^15}")
+        print("-" * 15, "-" * 10, "-" * 15, sep=" | ")
+        for session in load_lastest_session():
+            print(f"{session['activity']:>15} | {round(session['duration'], 2):<10} | {session['date']:<15}")
+    else:
+        print("No statistics available for the selected period.")
         
     input("\nPress <Enter> to return to the main menu ...")
     
