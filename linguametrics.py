@@ -119,6 +119,37 @@ def load_latest_sessions() -> list:
     finally:
         if conn:
             conn.close()
+            
+def format_seconds(total_seconds):
+    if total_seconds < 0:
+        return "0 seconds"
+    else:
+        td = timedelta(seconds=total_seconds)
+        
+        days = td.days
+        seconds = td.seconds
+        microseconds = td.microseconds
+        
+        # timedelta stores days separately, so convert them to hours.
+        hours = (days * 24) + (seconds // 3600)
+        minutes = (seconds % 3600) // 60
+        remaining_seconds = seconds % 60
+        
+        # if there are microseconds, a tail with two decimal places is saved; if there are none, there will be no microseconds
+        ms_part = f".{microseconds // 10000:02d}" if microseconds else ""
+        
+        result = []
+        
+        if hours > 0:
+            result.append(f"{hours} hour(s)")
+        if minutes > 0:
+            result.append(f"{minutes} minutes")
+        # Show seconds if they are the only part
+        # or if there is a fractional part.
+        if remaining_seconds > 0 or microseconds > 0 or not result:
+            result.append(f"{remaining_seconds}{ms_part} seconds")
+            
+        return " ".join(result)
 
 # ------- CORE -------
 
