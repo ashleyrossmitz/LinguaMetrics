@@ -168,7 +168,6 @@ def record_session() -> None:
 def show_statistics() -> None:
     period = choose_period()
     
-    clear_screen()
     print_statistics_screen()
     
     activity_totals = load_period_totals(period)
