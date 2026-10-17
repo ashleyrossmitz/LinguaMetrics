@@ -155,13 +155,7 @@ def record_session() -> None:
     
 def show_statistics():
     period = choose_period()
-    match period:
-        case 1:
-            activity_totals = load_period_totals(1)
-        case 2:
-            activity_totals = load_period_totals(2)
-        case 3:
-            activity_totals = load_period_totals(3)
+    activity_totals = load_period_totals(period)
     print(activity_totals)
     input()
     
