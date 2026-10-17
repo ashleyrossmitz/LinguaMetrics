@@ -115,10 +115,7 @@ def load_lastest_session() -> list:
         cur = conn.cursor()
         cur.execute("SELECT activity, duration, date FROM statistics ORDER BY id DESC LIMIT 3")
         rows = cur.fetchall()
-        if rows:
-            return [{"activity": row[0], "duration": row[1], "date": row[2]} for row in rows]
-        else:
-            return []
+        return [{"activity": row[0], "duration": row[1], "date": row[2]} for row in rows]
     finally:
         if conn:
             conn.close()
