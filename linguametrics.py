@@ -18,7 +18,8 @@ ERRORS = {
     "OperationalError": "Error: the database is busy, access is denied, or the file is corrupted.",
     "IntegrityError": "Error: invalid data.",
     "DatabaseError": "Error: the database is corrupted.",
-    "Error": "Failed to open the database. The program cannot run."
+    "Error": "Failed to open the database. The program cannot run.",
+    "LoadDBError": "Failed to read the DB"
 }
 
 # ------- DATABASE -------
@@ -67,9 +68,8 @@ def add_session(session_record: dict) -> str:
             conn.close()
             
 def load_period_totals(period: int) -> dict:
-    conn = None
+    conn = sqlite3.connect(DATABASE_FILE)
     try:
-        conn = sqlite3.connect(DATABASE_FILE)
         cur = conn.cursor()
         match period:
             case 1:
@@ -91,13 +91,11 @@ def load_period_totals(period: int) -> dict:
         rows = cur.fetchall()
         return {activity: total for activity, total in rows}
     finally:
-        if conn:
-            conn.close()
+        conn.close()
             
 def load_latest_sessions(period: int = 1) -> list:
-    conn = None
+    conn = sqlite3.connect(DATABASE_FILE)
     try:
-        conn = sqlite3.connect(DATABASE_FILE)
         cur = conn.cursor()
         match period:
             case 1:
@@ -109,8 +107,7 @@ def load_latest_sessions(period: int = 1) -> list:
         rows = cur.fetchall()
         return [{"activity": row[0], "duration": row[1], "date": row[2]} for row in rows]
     finally:
-        if conn:
-            conn.close()
+        conn.close()
 
 # ------- UTILITIES -------
 
@@ -241,10 +238,16 @@ def record_session() -> None:
     
 def show_statistics() -> None:
     period = choose_period()
-    
     print_statistics_screen()
     
-    activity_totals = load_period_totals(period)
+    try:
+        activity_totals = load_period_totals(period)
+        sessions = load_latest_sessions(period)
+    except sqlite3.Error:
+        print(ERRORS["LoadDBError"])
+        input("\nPress <Enter> to return to the main menu ...")
+        return
+    
     if activity_totals:
         match period:
             case 1: print("Statistics for today:\n")
@@ -258,7 +261,7 @@ def show_statistics() -> None:
         print(f"{'Activity':^15} | {'Duration':^15} | {'Date':^15}")
         print("-" * 15, "-" * 15, "-" * 15, sep=" | ")
         
-        for session in load_latest_sessions(period):
+        for session in sessions:
             print(f"{session['activity']:>15} | {format_seconds(session['duration']):<15} | {session['date']:<15}")
     else:
         print("No statistics available for the selected period.")
