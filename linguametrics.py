@@ -85,7 +85,7 @@ def load_period_totals(period: int) -> dict:
                     FROM statistics
                     WHERE date >= ?
                     GROUP BY activity            
-                """, ((datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d"),))
+                """, ((datetime.now() - timedelta(days=6)).strftime("%Y-%m-%d"),))
             case 3:
                 cur.execute("SELECT activity, SUM(duration) FROM statistics GROUP BY activity")
         rows = cur.fetchall()
@@ -103,7 +103,7 @@ def load_latest_sessions(period: int = 1) -> list:
             case 1:
                 cur.execute("SELECT activity, duration, date FROM statistics WHERE date = ? ORDER BY id DESC LIMIT 3", (datetime.now().strftime("%Y-%m-%d"),))
             case 2:
-                cur.execute("SELECT activity, duration, date FROM statistics WHERE date >= ? ORDER BY id DESC LIMIT 3", ((datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d"),))
+                cur.execute("SELECT activity, duration, date FROM statistics WHERE date >= ? ORDER BY id DESC LIMIT 3", ((datetime.now() - timedelta(days=6)).strftime("%Y-%m-%d"),))
             case 3:
                 cur.execute("SELECT activity, duration, date FROM statistics ORDER BY id DESC LIMIT 3")
         rows = cur.fetchall()
