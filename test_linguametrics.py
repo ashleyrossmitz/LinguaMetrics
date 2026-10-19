@@ -82,3 +82,7 @@ def test_build_session_record_raises_when_activity_negative():
 def test_build_session_record_raises_when_activity_zero():
     with pytest.raises(ValueError, match="Unknown activity: 0"):
         build_session_record(0, 15.0, "2023-01-01")
+        
+def test_build_session_record_retuurns_when_activity_equal_to_1():
+    result = build_session_record(1, 100.0, "2023-01-01")
+    assert result["activity"] == "listening"
