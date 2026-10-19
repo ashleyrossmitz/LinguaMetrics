@@ -62,10 +62,16 @@ def test_format_seconds_returns_only_minutes_when_exact_minute():
     
 # ---------- build_session_record ----------
 
-def test_build_session_record_returns_dict_when_activity_valid():
-    result = build_session_record(3, 234.12378, "2000-01-01")
+@pytest.mark.parametrize("activity_code, expected_name", [
+    (1, "listening"),
+    (2, "reading"),
+    (3, "viewing")
+])
+
+def test_build_session_record_returns_dict_when_activity_valid(activity_code, expected_name):
+    result = build_session_record(activity_code, 234.12378, "2000-01-01")
     assert result == {
-        "activity": "viewing",
+        "activity": expected_name,
         "duration": 234.12378,
         "date": "2000-01-01",
         "language": "English"
@@ -82,15 +88,3 @@ def test_build_session_record_raises_when_activity_negative():
 def test_build_session_record_raises_when_activity_zero():
     with pytest.raises(ValueError, match="Unknown activity: 0"):
         build_session_record(0, 15.0, "2023-01-01")
-        
-def test_build_session_record_retuurns_when_activity_equal_to_1():
-    result = build_session_record(1, 100.0, "2023-01-01")
-    assert result["activity"] == "listening"
-    
-def test_build_session_record_retuurns_when_activity_equal_to_2():
-    result = build_session_record(2, 100.0, "2023-01-01")
-    assert result["activity"] == "reading"
-    
-def test_build_session_record_retuurns_when_activity_equal_to_3():
-    result = build_session_record(3, 100.0, "2023-01-01")
-    assert result["activity"] == "viewing"
