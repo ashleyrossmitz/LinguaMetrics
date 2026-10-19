@@ -67,7 +67,6 @@ def test_format_seconds_returns_only_minutes_when_exact_minute():
     (2, "reading"),
     (3, "viewing")
 ])
-
 def test_build_session_record_returns_dict_when_activity_valid(activity_code, expected_name):
     result = build_session_record(activity_code, 234.12378, "2000-01-01")
     assert result == {
@@ -76,15 +75,8 @@ def test_build_session_record_returns_dict_when_activity_valid(activity_code, ex
         "date": "2000-01-01",
         "language": "English"
     }
-    
-def test_build_session_record_raises_when_activity_invalid():
-    with pytest.raises(ValueError, match="Unknown activity: 42"):
-        build_session_record(42, 15.0, "2023-01-01")
-        
-def test_build_session_record_raises_when_activity_negative():
-    with pytest.raises(ValueError, match="Unknown activity: -15"):
-        build_session_record(-15, 15.0, "2023-01-01")
-        
-def test_build_session_record_raises_when_activity_zero():
-    with pytest.raises(ValueError, match="Unknown activity: 0"):
-        build_session_record(0, 15.0, "2023-01-01")
+
+@pytest.mark.parametrize("activity_code", [42, -15, 0])
+def test_build_session_record_raises_when_activity_invalid(activity_code):
+    with pytest.raises(ValueError, match=f"Unknown activity: {activity_code}"):
+        build_session_record(activity_code, 15.0, "2023-01-01")
