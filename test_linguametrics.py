@@ -70,3 +70,7 @@ def test_build_session_record_returns_dict_when_activity_valid():
         "date": "2000-01-01",
         "language": "English"
     }
+    
+def test_build_session_record_raises_when_activity_invalid():
+    with pytest.raises(ValueError, match="Unknown activity: 42"):
+        build_session_record(42, 15.0, "2023-01-01")
