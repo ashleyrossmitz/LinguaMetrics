@@ -78,3 +78,7 @@ def test_build_session_record_raises_when_activity_invalid():
 def test_build_session_record_raises_when_activity_negative():
     with pytest.raises(ValueError, match="Unknown activity: -15"):
         build_session_record(-15, 15.0, "2023-01-01")
+        
+def test_build_session_record_raises_when_activity_zero():
+    with pytest.raises(ValueError, match="Unknown activity: 0"):
+        build_session_record(0, 15.0, "2023-01-01")
