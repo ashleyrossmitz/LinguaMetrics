@@ -143,7 +143,7 @@ def format_seconds(total_seconds):
         remaining_seconds = seconds % 60
         
         # if there are microseconds, a tail with two decimal places is saved; if there are none, there will be no microseconds
-        ms_part = f".{microseconds // 10000:02d}" if microseconds else ""
+        fractional_part = f".{microseconds // 10000:02d}" if microseconds else ""
         
         result = []
         
@@ -154,7 +154,7 @@ def format_seconds(total_seconds):
         # Show seconds if they are the only part
         # or if there is a fractional part.
         if remaining_seconds > 0 or microseconds > 0 or not result:
-            result.append(f"{remaining_seconds}{ms_part} seconds")
+            result.append(f"{remaining_seconds}{fractional_part} seconds")
             
         return " ".join(result)
 
