@@ -86,3 +86,11 @@ def test_build_session_record_raises_when_activity_zero():
 def test_build_session_record_retuurns_when_activity_equal_to_1():
     result = build_session_record(1, 100.0, "2023-01-01")
     assert result["activity"] == "listening"
+    
+def test_build_session_record_retuurns_when_activity_equal_to_2():
+    result = build_session_record(2, 100.0, "2023-01-01")
+    assert result["activity"] == "reading"
+    
+def test_build_session_record_retuurns_when_activity_equal_to_3():
+    result = build_session_record(3, 100.0, "2023-01-01")
+    assert result["activity"] == "viewing"
