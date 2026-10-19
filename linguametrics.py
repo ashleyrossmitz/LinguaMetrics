@@ -129,7 +129,7 @@ def prompt_int_in_range(prompt: str, min_value: int, max_value: int) -> int:
             
 def format_seconds(total_seconds):
     if total_seconds < 0:
-        return "0 seconds"
+        return "0 second(s)"
     else:
         td = timedelta(seconds=total_seconds)
         
