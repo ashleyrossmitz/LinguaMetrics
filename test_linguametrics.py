@@ -42,14 +42,17 @@ def test_format_seconds_returns_zero_when_zero():
 def test_format_seconds_returns_zero_when_negative():
     assert format_seconds(-1) == "0 seconds"
     
-def test_format_seconds_returns_only_seconds_when_less_minute():
+def test_format_seconds_returns_only_seconds_when_less_than_minute():
     assert format_seconds(59) == "59 seconds"
     
-def test_format_seconds_returns_minutes_and_seconds_when_less_hour():
+def test_format_seconds_returns_minutes_and_seconds_when_less_than_hour():
     assert format_seconds(3599) == "59 minutes 59 seconds"
     
-def test_format_seconds_returns_hours_minutes_seconds_when_more_hour():
+def test_format_seconds_returns_hours_minutes_seconds_when_more_than_hour():
     assert format_seconds(4000) == "1 hour(s) 6 minutes 40 seconds"
     
-def test_format_seconds_includes_frunction_when_microseconds_present():
+def test_format_seconds_includes_fraction_when_microseconds_present():
     assert format_seconds(15.234) == "15.23 seconds"
+    
+def test_format_seconds_returns_only_hours_when_exact_hour():
+    assert format_seconds(3600) == "1 hour(s)"
