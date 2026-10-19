@@ -41,3 +41,6 @@ def test_format_seconds_returns_zero_when_zero():
     
 def test_format_seconds_returns_zero_when_negative():
     assert format_seconds(-1) == "0 seconds"
+    
+def test_format_seconds_returns_only_seconds_when_less_minute():
+    assert format_seconds(59) == "59 seconds"
