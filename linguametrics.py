@@ -168,22 +168,17 @@ def measure_time(start_msg: str, stop_msg: str) -> float:
     stop_time = time.perf_counter()
     return stop_time - start_time
     
-def build_session_record(activity_code: int) -> dict:
+def build_session_record(activity_code: int, duration: float, date: str) -> dict:
     """Collects data for a single session: activity, duration, date."""
     if activity_code not in ACTIVITIES:
         raise ValueError(f"Unknown activity: {activity_code}")
     
-    clear_screen()
-    
-    duration = measure_time(
-        "Press <Enter> to start timer ...",
-        "Press <Enter> to stop timer ..."
-    )
-    date = datetime.now().strftime("%Y-%m-%d")
-    
-    language = "English"
-    
-    return {"activity": ACTIVITIES[activity_code], "duration": duration, "date": date, "language": language}
+    return {
+        "activity": ACTIVITIES[activity_code],
+        "duration": duration,
+        "date": date,
+        "language": "English"
+    }
 
 # ------- UI -------
 
@@ -220,7 +215,14 @@ def choose_period() -> int:
 
 def record_session() -> None:
     activity = choose_activity()
-    session_record = build_session_record(activity)
+    
+    clear_screen()
+    
+    duration = measure_time("Press <Enter> to start timer ...", "Press <Enter> to stop timer ...")
+    date = datetime.now().strftime("%Y-%m-%d")
+    
+    session_record = build_session_record(activity, duration, date)
+    
     status = add_session(session_record)
     
     if status == "ok":
