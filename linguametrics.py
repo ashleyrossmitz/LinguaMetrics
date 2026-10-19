@@ -150,11 +150,11 @@ def format_seconds(total_seconds):
         if hours > 0:
             result.append(f"{hours} hour(s)")
         if minutes > 0:
-            result.append(f"{minutes} minutes")
+            result.append(f"{minutes} minute(s)")
         # Show seconds if they are the only part
         # or if there is a fractional part.
         if remaining_seconds > 0 or microseconds > 0 or not result:
-            result.append(f"{remaining_seconds}{fractional_part} seconds")
+            result.append(f"{remaining_seconds}{fractional_part} second(s)")
             
         return " ".join(result)
 
