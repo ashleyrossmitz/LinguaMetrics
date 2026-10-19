@@ -88,6 +88,7 @@ LinguaMetrics/
 - [x] Handle SQLite errors while loading statistics
 - [x] Correct the weekly filter to cover seven calendar dates
 - [x] Add initial tests for `prompt_int_in_range()`
+- [ ] Fix pluralization: "1 minute" not "1 minute(s)", "2 minutes" not "2 minute(s)"
 - [ ] Fix table alignment for long time values
 - [ ] Handle errors while closing database connections without masking the original error
 - [ ] Validate period values inside the statistics functions

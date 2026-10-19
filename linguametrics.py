@@ -129,7 +129,7 @@ def prompt_int_in_range(prompt: str, min_value: int, max_value: int) -> int:
             
 def format_seconds(total_seconds):
     if total_seconds < 0:
-        return "0 seconds"
+        return "0 second(s)"
     else:
         td = timedelta(seconds=total_seconds)
         
@@ -143,18 +143,18 @@ def format_seconds(total_seconds):
         remaining_seconds = seconds % 60
         
         # if there are microseconds, a tail with two decimal places is saved; if there are none, there will be no microseconds
-        ms_part = f".{microseconds // 10000:02d}" if microseconds else ""
+        fractional_part = f".{microseconds // 10000:02d}" if microseconds else ""
         
         result = []
         
         if hours > 0:
             result.append(f"{hours} hour(s)")
         if minutes > 0:
-            result.append(f"{minutes} minutes")
+            result.append(f"{minutes} minute(s)")
         # Show seconds if they are the only part
         # or if there is a fractional part.
         if remaining_seconds > 0 or microseconds > 0 or not result:
-            result.append(f"{remaining_seconds}{ms_part} seconds")
+            result.append(f"{remaining_seconds}{fractional_part} second(s)")
             
         return " ".join(result)
 
