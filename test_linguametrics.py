@@ -1,5 +1,5 @@
 import pytest
-from linguametrics import prompt_int_in_range
+from linguametrics import prompt_int_in_range, format_seconds
 
 # ---------- prompt_int_in_range ----------
 def test_valid_input(monkeypatch):
@@ -33,3 +33,8 @@ def test_many_errors_then_valid(monkeypatch):
     answers = iter(["abc", "0", "100", "5"])
     monkeypatch.setattr("builtins.input", lambda prompt: next(answers))
     assert prompt_int_in_range("Enter:", 1, 10) == 5
+    
+# ---------- format_seconds ----------
+
+def test_format_seconds_return_zero_when_zero():
+    assert format_seconds(0) == "0 seconds"
