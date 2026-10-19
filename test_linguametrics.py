@@ -44,3 +44,9 @@ def test_format_seconds_returns_zero_when_negative():
     
 def test_format_seconds_returns_only_seconds_when_less_minute():
     assert format_seconds(59) == "59 seconds"
+    
+def test_format_seconds_retrns_minutes_and_seconds_when_less_hour():
+    assert format_seconds(3599) == "59 minutes 59 seconds"
+    
+def test_format_seconds_returns_hours_minutes_seconds_when_more_hour():
+    assert format_seconds(4000) == "1 hour(s) 6 minutes 40 seconds"
