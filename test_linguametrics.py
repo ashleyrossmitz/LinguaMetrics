@@ -1,5 +1,5 @@
 import pytest
-from linguametrics import prompt_int_in_range, format_seconds
+from linguametrics import prompt_int_in_range, format_seconds, build_session_record
 
 # ---------- prompt_int_in_range ----------
 def test_prompt_int_in_range_returns_value_when_input_valid(monkeypatch):
@@ -59,3 +59,24 @@ def test_format_seconds_returns_only_hours_when_exact_hour():
     
 def test_format_seconds_returns_only_minutes_when_exact_minute():
     assert format_seconds(60) == "1 minute(s)"
+    
+# ---------- build_session_record ----------
+
+@pytest.mark.parametrize("activity_code, expected_name", [
+    (1, "listening"),
+    (2, "reading"),
+    (3, "viewing")
+])
+def test_build_session_record_returns_dict_when_activity_valid(activity_code, expected_name):
+    result = build_session_record(activity_code, 234.12378, "2000-01-01")
+    assert result == {
+        "activity": expected_name,
+        "duration": 234.12378,
+        "date": "2000-01-01",
+        "language": "English"
+    }
+
+@pytest.mark.parametrize("activity_code", [42, -15, 0])
+def test_build_session_record_raises_when_activity_invalid(activity_code):
+    with pytest.raises(ValueError, match=f"Unknown activity: {activity_code}"):
+        build_session_record(activity_code, 15.0, "2023-01-01")
