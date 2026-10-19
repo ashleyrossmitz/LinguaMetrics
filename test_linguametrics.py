@@ -36,5 +36,8 @@ def test_many_errors_then_valid(monkeypatch):
     
 # ---------- format_seconds ----------
 
-def test_format_seconds_return_zero_when_zero():
+def test_format_seconds_returns_zero_when_zero():
     assert format_seconds(0) == "0 seconds"
+    
+def test_format_seconds_returns_zero_when_negative():
+    assert format_seconds(-1) == "0 seconds"
