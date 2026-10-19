@@ -56,3 +56,6 @@ def test_format_seconds_includes_fraction_when_microseconds_present():
     
 def test_format_seconds_returns_only_hours_when_exact_hour():
     assert format_seconds(3600) == "1 hour(s)"
+    
+def test_format_seconds_returns_only_minutes_when_exact_minut():
+    assert format_seconds(60) == "1 minutes"
