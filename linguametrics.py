@@ -44,7 +44,10 @@ def init_db() -> None:
         sys.exit(1)
     finally:
         if conn:
-            conn.close()
+            try:
+                conn.close()
+            except sqlite3.Error:
+                pass
             
 def add_session(session_record: dict) -> str:
     """Adds session data to the SQLite table."""
@@ -65,7 +68,10 @@ def add_session(session_record: dict) -> str:
         return "DatabaseError"
     finally:
         if conn:
-            conn.close()
+            try:
+                conn.close()
+            except sqlite3.Error:
+                pass
             
 def load_period_totals(period: int) -> dict:
     conn = sqlite3.connect(DATABASE_FILE)
@@ -116,7 +122,6 @@ def clear_screen() -> None:
     
 def prompt_int_in_range(prompt: str, min_value: int, max_value: int) -> int:
     '''Checks whether the entered message is a number and whether it falls within the required range of numbers.'''
-    
     while True:
         try:
             user_choice = int(input(prompt))
@@ -172,7 +177,6 @@ def build_session_record(activity_code: int, duration: float, date: str) -> dict
     """Collects data for a single session: activity, duration, date."""
     if activity_code not in ACTIVITIES:
         raise ValueError(f"Unknown activity: {activity_code}")
-    
     return {
         "activity": ACTIVITIES[activity_code],
         "duration": duration,
