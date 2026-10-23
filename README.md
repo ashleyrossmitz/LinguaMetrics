@@ -1,3 +1,7 @@
+> [!WARNING]
+> **Project status: paused (burnout).** 
+> The project reached v0.1.0 (console prototype with SQLite). Development is paused to focus on learning fundamentals without AI assistance. May be resumed later.
+
 <div align="center">
 
 # LinguaMetrics
